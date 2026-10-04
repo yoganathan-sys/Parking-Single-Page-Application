@@ -4,43 +4,56 @@
  * Local XAMPP + TiDB Cloud
  */
 
-$host     = getenv('DB_HOST') ?: 'localhost';
+$host = getenv('DB_HOST') ?: 'localhost';
 $username = getenv('DB_USER') ?: 'root';
 $password = getenv('DB_PASS') !== false ? getenv('DB_PASS') : '';
 $database = getenv('DB_NAME') ?: 'park';
-$port     = getenv('DB_PORT') ? (int)getenv('DB_PORT') : 3306;
+$port = getenv('DB_PORT') ? (int)getenv('DB_PORT') : 3306;
 
-// Initialize MySQL connection
 $con = mysqli_init();
 
 if (!$con) {
     die("mysqli_init failed");
 }
 
-// TiDB Cloud SSL certificate
-$ssl_ca = getenv('MYSQL_ATTR_SSL_CA');
+/*
+ * TiDB Cloud Starter requires TLS.
+ *
+ * On Vercel/Linux, use the system CA bundle.
+ * TiDB Cloud uses Let's Encrypt certificates.
+ */
+if ($host !== 'localhost') {
 
-if (!$ssl_ca) {
-    $local_ca = __DIR__ . '/isrgrootx1.pem';
+    $ca_paths = [
+        getenv('MYSQL_ATTR_SSL_CA'),
+        '/etc/ssl/certs/ca-certificates.crt',
+        '/etc/ssl/cert.pem',
+        __DIR__ . '/isrgrootx1.pem'
+    ];
 
-    if (file_exists($local_ca)) {
-        $ssl_ca = $local_ca;
+    $ca_file = null;
+
+    foreach ($ca_paths as $path) {
+        if ($path && file_exists($path)) {
+            $ca_file = $path;
+            break;
+        }
     }
-}
 
-// Enable SSL when connecting to TiDB
-if ($ssl_ca) {
+    if (!$ca_file) {
+        die("SSL CA certificate not found.");
+    }
+
     mysqli_ssl_set(
         $con,
-        NULL,
-        NULL,
-        $ssl_ca,
-        NULL,
-        NULL
+        null,
+        null,
+        $ca_file,
+        null,
+        null
     );
 }
 
-// Connect to database
 $connected = @mysqli_real_connect(
     $con,
     $host,
@@ -51,11 +64,8 @@ $connected = @mysqli_real_connect(
 );
 
 if (!$connected) {
-    $db_error = mysqli_connect_error();
-
-    die("Database connection failed: " . $db_error);
+    die("Database connection failed: " . mysqli_connect_error());
 }
 
-// Set UTF-8
 mysqli_set_charset($con, "utf8mb4");
 ?>
