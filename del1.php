@@ -1,13 +1,12 @@
-<body>
 <?php
-$carno=$_GET['del'];
-$con = mysqli_connect('localhost','root',null,'park');
-$qry="Delete from park1 where carno='$carno'";
-$s=mysqli_query($con,$qry);
-if ($s)
-	echo "<script>location.replace('parkingorg.php')</script>";
-else
-	echo "Connection Failed";
+require_once __DIR__ . '/config.php';
 
+if (isset($_GET['del1']) && !empty($_GET['del1']) && $connected) {
+    $carno = mysqli_real_escape_string($con, trim($_GET['del1']));
+    $qry = "DELETE FROM park1 WHERE carno = '$carno'";
+    mysqli_query($con, $qry);
+}
+
+header("Location: index.php?msg=deleted");
+exit();
 ?>
-</body>

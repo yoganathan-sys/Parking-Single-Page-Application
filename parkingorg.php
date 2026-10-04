@@ -84,7 +84,7 @@ value='<?php echo htmlspecialchars($caro); ?>'>
 <td>
 <button type='submit'class='btn btn-secondary'style='margin-right:25px'name='edit'
 onclick='return confirm("Are You Edit?")'>UPDATE</button>
-<a href='del1.php?del=<?php echo urlencode($carno); ?>'class='btn btn-danger'
+<a href='del1.php? del1=<?php echo urlencode($carno); ?>'class='btn btn-danger'
 onclick='return confirm("Are You Delete?")'>DELETE</a>
 </td>
 </form>
@@ -119,59 +119,31 @@ $('#demo').click(function()
 });
 </script>
 <div class='modal' id='test'>
-<div class='modal-dialog'>
+<div class ='modal-dialog'>
 <div class='modal-content'>
-<div class='modal-header'
-style='background-color:green'><h5>Add New Items</h5>
-<button type="button"class="close"data-dismiss="modal">
-<span>&times;</span>
-</button>
+<div class='modal-header' style='background-color:green'>
+<h5>Add New Car Details</h5>
 </div>
-<div class='modal-body'
-style='background-color:blue'>
+<div class='modal-body' style='background-color:red'>
 <form action='#' method='post'>
-<div class="form-group">
-<input type='number'
-name='carno'
-class="form-control"
-required
-placeholder='Enter Car Code:'>
-</div>
-<div class="form-group">
-<input type='text'
-name='carn'
-class="form-control"
-required
-placeholder='Enter Car Name:'>
-</div>
-<div class="form-group">
-<input type='text'
-name='caro'
-class="form-control"
-required
-placeholder='Enter Car Owner Name:'>
-</div>
-<div class="form-group">
-<input type='number'
-name='charge'
-class="form-control"
-required
-placeholder='Enter The Charge:'>
-</div>
-<button type="submit"
-name='submit'
-class="btn btn-warning">
-Register
-</button>
+ <div class="form-group">
+    <input type='number' name='carno' class="form-control" required placeholder='Enter Car Code: '>
+ </div>
+ <div class="form-group">
+     <input type='text' name='carn' class="form-control" required placeholder='Enter Car Name: '>
+ </div>
+ <div class="form-group">
+     <input type='text' name='caro' class="form-control" required placeholder='Enter Car Owner Name: '>
+ </div>
+ <div class="form-group">
+      <input type='number' name='charge' class="form-control" required placeholder='Enter The Charge: '>
+ </div>
+ 
+    <button type="submit" name='submit' class="btn-register">Register</button>
 </form>
 </div>
-<div class='modal-footer'
-style='background-color:red'>
-<button type='button'
-class='btn btn-secondary'
-data-dismiss='modal'>
-Close
-</button>
+<div class='modal-footer' style='background-color:blue'>
+<button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>
 </div>
 </div>
 </div>
