@@ -1,26 +1,22 @@
-# Environment and secrets
+# Environment / secrets
 .env
 .env.*
-config.local.php
+!.env.example
 
-# Archives & Binaries
-*.zip
-*.tar.gz
-*.rar
+# TiDB SSL certificate
+isrgrootx1.pem
+*.pem
+*.key
+*.crt
 
-# OS generated files
-Thumbs.db
-Thumbs.db:encryptable
-ehthumbs.db
-ehthumbs_vista.db
+# Local development
+xampp/
+node_modules/
+
+# OS files
 .DS_Store
+Thumbs.db
 
-# IDE and Editor files
+# Editor files
 .vscode/
 .idea/
-*.sublime-project
-*.sublime-workspace
-
-# Logs and Vercel build artifacts
-.vercel
-*.log

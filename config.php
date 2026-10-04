@@ -1,8 +1,7 @@
 <?php
 /**
  * Database Configuration
- * Supports environment variables for cloud deployment (Vercel, Railway, etc.)
- * with fallback to local XAMPP defaults.
+ * Local XAMPP + TiDB Cloud
  */
 
 $host     = getenv('DB_HOST') ?: 'localhost';
@@ -11,24 +10,52 @@ $password = getenv('DB_PASS') !== false ? getenv('DB_PASS') : '';
 $database = getenv('DB_NAME') ?: 'park';
 $port     = getenv('DB_PORT') ? (int)getenv('DB_PORT') : 3306;
 
-// Establish database connection
+// Initialize MySQL connection
 $con = mysqli_init();
 
 if (!$con) {
     die("mysqli_init failed");
 }
 
-// Support SSL if provided in environment (useful for TiDB, Aiven, Supabase)
-if (getenv('MYSQL_ATTR_SSL_CA')) {
-    mysqli_ssl_set($con, NULL, NULL, getenv('MYSQL_ATTR_SSL_CA'), NULL, NULL);
+// TiDB Cloud SSL certificate
+$ssl_ca = getenv('MYSQL_ATTR_SSL_CA');
+
+if (!$ssl_ca) {
+    $local_ca = __DIR__ . '/isrgrootx1.pem';
+
+    if (file_exists($local_ca)) {
+        $ssl_ca = $local_ca;
+    }
 }
 
-$connected = @mysqli_real_connect($con, $host, $username, $password, $database, $port);
+// Enable SSL when connecting to TiDB
+if ($ssl_ca) {
+    mysqli_ssl_set(
+        $con,
+        NULL,
+        NULL,
+        $ssl_ca,
+        NULL,
+        NULL
+    );
+}
+
+// Connect to database
+$connected = @mysqli_real_connect(
+    $con,
+    $host,
+    $username,
+    $password,
+    $database,
+    $port
+);
 
 if (!$connected) {
-    // When deploying without DB setup, provide informative message
     $db_error = mysqli_connect_error();
-} else {
-    mysqli_set_charset($con, "utf8mb4");
+
+    die("Database connection failed: " . $db_error);
 }
+
+// Set UTF-8
+mysqli_set_charset($con, "utf8mb4");
 ?>
