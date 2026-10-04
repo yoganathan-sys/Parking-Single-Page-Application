@@ -1,22 +1,51 @@
-# Environment / secrets
+# ==============================
+# Environment / Secrets
+# ==============================
+
 .env
 .env.*
 !.env.example
 
-# TiDB SSL certificate
-isrgrootx1.pem
+# SSL / certificate files
 *.pem
 *.key
 *.crt
 
-# Local development
+# ==============================
+# Local XAMPP / Development
+# ==============================
+
 xampp/
 node_modules/
 
-# OS files
-.DS_Store
-Thumbs.db
+# ==============================
+# IDE / Editor
+# ==============================
 
-# Editor files
 .vscode/
 .idea/
+
+# ==============================
+# Operating System
+# ==============================
+
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==============================
+# Project Archives
+# ==============================
+
+*.zip
+*.rar
+*.7z
+
+# ==============================
+# Temporary / Backup Files
+# ==============================
+
+*.tmp
+*.temp
+*.bak
+*~
